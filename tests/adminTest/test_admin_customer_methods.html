@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Coupon System Test</h1>
+    <fieldset>
+      <legend>Test Admin Customer Methods</legend>
+      <div>id <input type="number" id="id" /></div>
+      <div>first name <input type="text" id="firstName" /></div>
+      <div>last name <input type="text" id="lastName" /></div>
+      <div>email <input type="text" id="email" /></div>
+      <div>password <input type="text" id="password" /></div>
+      <div>token <input type="text" id="token" /></div>
+      <br />
+      <div>
+        <button onclick="save()">Save</button>
+        <br />
+        <br>
+        <button onclick="getCustomerById()">Get One</button>
+        <button onclick="getAllCustomers()">Get All Customers</button>
+        <button onclick="update()">Update</button>
+        <button onclick="deleteOne()">Delete</button>
+        <br />
+        <br>
+        <button onclick="login()">Login</button>
+      </div>
+    </fieldset>
+    <br />
+    <fieldset>
+      <legend>Response</legend>
+      <div id="response"></div>
+    </fieldset>
+  </body>
+  <script>
+    function update(params) {
+      let toket = document.getElementById("token").value;
+      let id = document.getElementById("id").value;
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+
+      let customer = new Custoemr(id, firstName, lastName, email, password);
+
+      let customerAsJson = JSON.stringify(customer);
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+        }
+      };
+      xhttp.open("PUT", "http://localhost:8080/api/update-customer");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send(customerAsJson);
+    }
+
+    function deleteOne(params) {
+      let toket = document.getElementById("token").value;
+      let id = document.getElementById("id").value;
+      // convert a JS object to JSON
+      let idAsJSON = JSON.stringify(id);
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+        }
+      };
+      xhttp.open("DELETE", "http://localhost:8080/api/delete-customer/" + id);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send();
+    }
+
+    function login(params) {
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+      // convert a JS object to JSON
+      let idAsJSON = JSON.stringify(id);
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+          document.getElementById("token").innerHTML = this.response;
+        }
+      };
+      xhttp.open(
+        "POST",
+        "http://localhost:8080/login/admin/" + email + "/" + password
+      );
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.send();
+    }
+
+    function getAllCustomers() {
+      let xhttp = new XMLHttpRequest();
+      let toket = document.getElementById("token").value;
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+        }
+      };
+      xhttp.open("GET", "http://localhost:8080/api/customers");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send();
+    }
+
+    function getCustomerById(params) {
+      let id = document.getElementById("id").value;
+      // convert a JS object to JSON
+      let idAsJSON = JSON.stringify(id);
+      let toket = document.getElementById("token").value;
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            document.getElementById("response").innerHTML = this.response;
+          } else {
+            let responseAsObject = JSON.parse(this.response);
+            console.log(responseAsObject);
+            let error = responseAsObject.error;
+            let message = responseAsObject.message;
+            document.getElementById("response").innerHTML =
+              error + ": " + message;
+          }
+        }
+      };
+      xhttp.open("GET", "http://localhost:8080/api/customer/" + id);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send();
+    }
+
+    function save(params) {
+      let toket = document.getElementById("token").value;
+      let firstName = document.getElementById("firstName").value;
+      let lastName = document.getElementById("lastName").value;
+      let email = document.getElementById("email").value;
+      let password = document.getElementById("password").value;
+
+      let customer = new Custoemr(firstName, lastName, email, password);
+
+      let customerAsJson = JSON.stringify(customer);
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+        }
+      };
+      xhttp.open("POST", "http://localhost:8080/api/add-customer");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send(customerAsJson);
+    }
+
+    class Custoemr {
+      constructor(id, firstName, lastName, email, password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+      }
+    }
+  </script>
+</html>
