@@ -14,7 +14,7 @@
       <div>name <input type="text" id="name" /></div>
       <div>email <input type="text" id="email" /></div>
       <div>password <input type="text" id="password" /></div>
-      
+
       <br />
       <div>
         <button onclick="save()">Save</button>
@@ -57,13 +57,13 @@
         if (this.readyState == 4) {
           document.getElementById("response").innerHTML = this.response;
         } else {
-              let responseAsObject = JSON.parse(this.response);
-              console.log(responseAsObject);
-              let error = responseAsObject.error;
-              let message = responseAsObject.message;
-              document.getElementById("response").innerHTML =
-                error + ": " + message;
-            }
+          let responseAsObject = JSON.parse(this.response);
+          console.log(responseAsObject);
+          let error = responseAsObject.error;
+          let message = responseAsObject.message;
+          document.getElementById("response").innerHTML =
+            error + ": " + message;
+        }
       };
       xhttp.open("PUT", "http://localhost:8080/api/update-company");
       xhttp.setRequestHeader("Content-Type", "application/json");

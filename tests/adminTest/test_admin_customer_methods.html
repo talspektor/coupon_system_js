@@ -32,6 +32,12 @@
     </fieldset>
     <br />
     <fieldset>
+      <legend>Login</legend>
+      <div id="adminEmail">com.admin@admin</div>
+      <div id="adminPassword">admin</div>
+      <div id="token"></div>
+    </fieldset>
+    <fieldset>
       <legend>Response</legend>
       <div id="response"></div>
     </fieldset>
@@ -78,9 +84,9 @@
     }
 
     function login(params) {
-      let email = document.getElementById("email").value;
-      let password = document.getElementById("password").value;
-      // convert a JS object to JSON
+      let email = document.getElementById("adminEmail").innerHTML;
+      let password = document.getElementById("adminPassword").innerHTML;
+
       let idAsJSON = JSON.stringify(id);
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function (params) {
