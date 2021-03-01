@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Coupon System Test</h1>
+    <fieldset>
+      <legend>Test Customer Methods</legend>
+      <div>id <input type="number" id="id" /></div>
+      <div>amount <input type="text" id="amount" /></div>
+      <div>category <input type="text" id="category" /></div>
+      <div>description <input type="text" id="description" /></div>
+      <div>endDate <input type="text" id="endDate" /></div>
+      <div>imageUrl <input type="text" id="imageUrl" /></div>
+      <div>price <input type="text" id="price" /></div>
+      <div>startDate <input type="text" id="startDate" /></div>
+      <div>title <input type="text" id="title" /></div>
+      <div>company <input type="text" id="company" /></div>
+
+      <br />
+      <div>
+        <button onclick="getAllCoupons()">getAllCoupons</button>
+        <button onclick="getCustomerDetails()">getCustomerDetails</button>
+        <button onclick="getCustomerCoupons()">getCustomerCoupons</button>
+        <button onclick="getCouponsByCategory()">getCouponsByCategory</button>
+        <button onclick="getCouponnsByPriceLessThen()">
+          getCouponnsByPriceLessThen
+        </button>
+        <button onclick="purchaseCoupon()">purchaseCoupon</button>
+        <br />
+        <br />
+        <button onclick="login()">Login</button>
+      </div>
+    </fieldset>
+    <br />
+    <fieldset>
+      <legend>Login</legend>
+      <div id="customerEmail">zzz</div>
+      <div id="customerPassword">zzz</div>
+      <div id="token"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Response</legend>
+      <div id="response"></div>
+    </fieldset>
+  </body>
+  <script>
+    function getCustomerDetails() {
+      let xhttp = new XMLHttpRequest();
+      let toket = document.getElementById("token").value;
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+        }
+      };
+      xhttp.open("GET", "http://localhost:8080/api/customer");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.setRequestHeader("token", token);
+      xhttp.send();
+    }
+
+    function login(params) {
+      let email = document.getElementById("customerEmail").innerHTML;
+      let password = document.getElementById("customerPassword").innerHTML;
+
+      let idAsJSON = JSON.stringify(id);
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function (params) {
+        if (this.readyState == 4) {
+          document.getElementById("response").innerHTML = this.response;
+          document.getElementById("token").innerHTML = this.response;
+        }
+      };
+      xhttp.open(
+        "POST",
+        "http://localhost:8080/login/customer/" + email + "/" + password
+      );
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.send();
+    }
+
+    class Coupon {
+      constructor(
+        id,
+        amount,
+        category,
+        description,
+        company,
+        endDate,
+        imageUrl,
+        price,
+        startDate,
+        title
+      ) {
+        this.id = id;
+        this.amount = amount;
+        this.category = category;
+        this.description = description;
+        this.company = company;
+        this.endDate = endDate;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.startDate = startDate;
+        this.title = title;
+      }
+    }
+  </script>
+</html>

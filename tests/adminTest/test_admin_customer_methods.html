@@ -20,13 +20,13 @@
       <div>
         <button onclick="save()">Save</button>
         <br />
-        <br>
+        <br />
         <button onclick="getCustomerById()">Get One</button>
         <button onclick="getAllCustomers()">Get All Customers</button>
         <button onclick="update()">Update</button>
         <button onclick="deleteOne()">Delete</button>
         <br />
-        <br>
+        <br />
         <button onclick="login()">Login</button>
       </div>
     </fieldset>
@@ -44,7 +44,7 @@
   </body>
   <script>
     function update(params) {
-      let toket = document.getElementById("token").value;
+      let toket = sessionStorage.getItem("token")
       let id = document.getElementById("id").value;
       let firstName = document.getElementById("firstName").value;
       let lastName = document.getElementById("lastName").value;
@@ -67,7 +67,7 @@
     }
 
     function deleteOne(params) {
-      let toket = document.getElementById("token").value;
+      let toket = sessionStorage.getItem("token")
       let id = document.getElementById("id").value;
       // convert a JS object to JSON
       let idAsJSON = JSON.stringify(id);
@@ -93,6 +93,7 @@
         if (this.readyState == 4) {
           document.getElementById("response").innerHTML = this.response;
           document.getElementById("token").innerHTML = this.response;
+          sessionStorage.setItem = this.response;
         }
       };
       xhttp.open(
@@ -105,7 +106,7 @@
 
     function getAllCustomers() {
       let xhttp = new XMLHttpRequest();
-      let toket = document.getElementById("token").value;
+      let toket = sessionStorage.getItem("token")
       xhttp.onreadystatechange = function (params) {
         if (this.readyState == 4) {
           document.getElementById("response").innerHTML = this.response;
@@ -121,7 +122,7 @@
       let id = document.getElementById("id").value;
       // convert a JS object to JSON
       let idAsJSON = JSON.stringify(id);
-      let toket = document.getElementById("token").value;
+      let toket = sessionStorage.getItem("token")
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function (params) {
         if (this.readyState == 4) {
@@ -144,13 +145,13 @@
     }
 
     function save(params) {
-      let toket = document.getElementById("token").value;
+      let toket = sessionStorage.getItem("token")
       let firstName = document.getElementById("firstName").value;
       let lastName = document.getElementById("lastName").value;
       let email = document.getElementById("email").value;
       let password = document.getElementById("password").value;
 
-      let customer = new Custoemr(firstName, lastName, email, password);
+      let customer = new Custoemr(0, firstName, lastName, email, password);
 
       let customerAsJson = JSON.stringify(customer);
       let xhttp = new XMLHttpRequest();
@@ -159,6 +160,7 @@
           document.getElementById("response").innerHTML = this.response;
         }
       };
+      console.log(customer);
       xhttp.open("POST", "http://localhost:8080/api/add-customer");
       xhttp.setRequestHeader("Content-Type", "application/json");
       xhttp.setRequestHeader("token", token);
